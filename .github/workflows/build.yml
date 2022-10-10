@@ -14,7 +14,7 @@ jobs:
     defaults:
       run:
         working-directory: ./bookmarker-api
-    steps: 
+    steps:
       - uses: actions/checkout@v3
 
       - name: Set up JDK 17
@@ -26,11 +26,10 @@ jobs:
 
       - name: Build with Maven
         run: ./mvnw verify
-        
+
       - if: ${{ github.ref == 'refs/heads/main' }}
         name: Build and Publish Docker Image
-        run:
+        run: |
           ./mvnw clean package jib:dockerBuild -DskipTests
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker push ${{ secrets.DOCKER_USERNAME }}/bookmarker-api
-          
